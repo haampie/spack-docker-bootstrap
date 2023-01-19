@@ -14,7 +14,8 @@ Build with:
 DOCKER_BUILDKIT=1 docker build -t spack-optimized --progress=plain .
 ```
 
-Since this uses Python 3.11 and clingo with some optimizations, it should be generally a bit faster:
+Since this uses Python 3.11 and clingo with some optimizations, it should
+generally be faster:
 
 ```
 Benchmark 1: docker run --rm spack-optimized spack spec hdf5
