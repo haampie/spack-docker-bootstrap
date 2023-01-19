@@ -63,8 +63,7 @@ RUN apt-get -yqq update && \
     rm -rf /var/lib/apt/lists/*
 
 # Install Spack again and populate caches by concretizing something (don't generate __pycache__ here)
-RUN export PYTHONDONTWRITEBYTECODE=1 && \
-    mkdir /root/spack && \
+RUN mkdir /root/spack && \
     curl -Lfs https://github.com/spack/spack/archive/refs/heads/develop.tar.gz | tar -xzf - --strip-components=1 -C /root/spack && \
     spack compiler find && \
     spack spec zlib
