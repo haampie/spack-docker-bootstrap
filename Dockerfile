@@ -62,8 +62,8 @@ RUN apt-get -yqq update && \
     apt-get -yqq install --no-install-recommends gcc gfortran g++ libc-dev && \
     rm -rf /var/lib/apt/lists/*
 
-# Install Spack again and populate caches by concretizing something (don't generate __pycache__ here)
+# Install Spack again and populate caches by concretizing something
 RUN mkdir /root/spack && \
     curl -Lfs https://github.com/spack/spack/archive/refs/heads/develop.tar.gz | tar -xzf - --strip-components=1 -C /root/spack && \
     spack compiler find && \
-    spack spec zlib
+    spack spec hdf5
