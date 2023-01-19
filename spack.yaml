@@ -1,4 +1,5 @@
 spack:
+  view: false
   specs:
   - 'clingo-bootstrap@spack +optimized'
   - 'curl'
@@ -23,9 +24,23 @@ spack:
       root: /opt/spack
   concretizer:
     unify: true
+  compilers:
+  - compiler:
+      spec: clang@10.0.0
+      paths:
+        cc: /usr/bin/clang
+        cxx: /usr/bin/clang++
+        f77: null
+        fc: null
+      flags:
+        cxxflags: '-O3 -g0 -ffunction-sections'
+        cflags: '-O3 -g0 -ffunction-sections'
+        ldflags: '-fuse-ld=lld -Wl,-O3,--icf=safe'
+      operating_system: ubuntu20.04
+      target: x86_64
+      modules: []
+      environment: {}
+      extra_rpaths: []
   packages:
     all:
       require: target=x86_64_v2
-  view: false
-
-

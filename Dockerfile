@@ -20,6 +20,7 @@ RUN apt-get -yqq update && \
         git \
         gnupg2 \
         iproute2 \
+        lld \
         locales \
         make \
         patch \
@@ -30,9 +31,6 @@ RUN mkdir spack && \
     cd spack && \
     curl -Lfs https://github.com/spack/spack/archive/refs/heads/develop.tar.gz | tar -xzf - --strip-components=1 -C . && \
     curl -Lfs https://github.com/spack/spack/pull/34926.patch | patch -p1 && \
-    curl -Lfs https://github.com/spack/spack/pull/35009.patch | patch -p1 && \
-    curl -Lfs https://github.com/spack/spack/pull/35014.patch | patch -p1 && \
-    curl -Lfs https://github.com/spack/spack/pull/35019.patch | patch -p1 && \
     curl -Lfs https://github.com/spack/spack/pull/35020.patch | patch -p1 && \
     true
 
@@ -43,23 +41,30 @@ ADD spack.yaml Makefile /root/
 
 RUN --mount=type=cache,target=/buildcache \
     --mount=type=cache,target=/root/.spack/cache \
-    spack compiler find && \
     spack mirror add cache /buildcache && \
     make -j$(nproc) BUILDCACHE=/buildcache
+
+# Remove Spack metadata, python cache and static libraries to save some bytes
+RUN find -L /opt/spack -type d \( -name '__pycache__' -or -name '.spack' \) -exec rm -rf {} + && \
+    find -L /opt/spack -type f -name '*.a' -exec rm -rf {} +
 
 # Stage 2, create a small(er) docker image
 FROM ubuntu:20.04
 
+ENV DEBIAN_FRONTEND=noninteractive \
+    LC_ALL=C \
+    PATH=/opt/spack/view/bin:/root/spack/bin:$PATH
+
 COPY --from=build /opt/spack /opt/spack
-ENV PATH=/opt/spack/view/bin:/root/spack/bin:$PATH
 
 # We stick to system compilers & linkers
 RUN apt-get -yqq update && \
     apt-get -yqq install --no-install-recommends gcc gfortran g++ libc-dev && \
     rm -rf /var/lib/apt/lists/*
 
-# Install Spack again and populate caches by concretizing something
-RUN mkdir /root/spack && \
+# Install Spack again and populate caches by concretizing something (don't generate __pycache__ here)
+RUN export PYTHONDONTWRITEBYTECODE=1 && \
+    mkdir /root/spack && \
     curl -Lfs https://github.com/spack/spack/archive/refs/heads/develop.tar.gz | tar -xzf - --strip-components=1 -C /root/spack && \
     spack compiler find && \
     spack spec zlib
