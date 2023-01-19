@@ -44,7 +44,7 @@ ADD spack.yaml Makefile /root/
 RUN --mount=type=cache,target=/buildcache \
     --mount=type=cache,target=/root/.spack/cache \
     spack compiler find && \
-    spack mirror add cache file:///buildcache && \
+    spack mirror add cache /buildcache && \
     make -j$(nproc) BUILDCACHE=/buildcache
 
 # Stage 2, create a small(er) docker image
