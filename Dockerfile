@@ -51,12 +51,15 @@ RUN --mount=type=cache,target=/buildcache \
 FROM ubuntu:20.04
 
 COPY --from=build /opt/spack /opt/spack
-ENV PATH=/opt/spack/view/bin:/root/spack:$PATH
+ENV PATH=/opt/spack/view/bin:/root/spack/bin:$PATH
 
 # We stick to system compilers & linkers
 RUN apt-get -yqq update && \
     apt-get -yqq install --no-install-recommends gcc gfortran g++ libc-dev && \
     rm -rf /var/lib/apt/lists/*
 
+# Install Spack again and populate caches by concretizing something
 RUN mkdir /root/spack && \
-    curl -Lfs https://github.com/spack/spack/archive/refs/heads/develop.tar.gz | tar -xzf - --strip-components=1 -C /root/spack
+    curl -Lfs https://github.com/spack/spack/archive/refs/heads/develop.tar.gz | tar -xzf - --strip-components=1 -C /root/spack && \
+    spack compiler find && \
+    spack spec zlib
