@@ -4,7 +4,7 @@ WORKDIR /root
 
 ENV DEBIAN_FRONTEND=noninteractive \
     LC_ALL=C \
-    PATH=/root/spack/bin:/usr/bin:/bin
+    PATH=/root/tools/bin:/root/spack/bin:/usr/bin:/bin
 
 RUN apt-get -yqq update && \
     apt-get -yqq install \
@@ -21,7 +21,6 @@ RUN apt-get -yqq update && \
         gnupg2 \
         iproute2 \
         lld \
-        locales \
         make \
         patch \
         python3 \
@@ -32,12 +31,20 @@ RUN mkdir spack && \
     curl -Lfs https://github.com/spack/spack/archive/refs/heads/develop.tar.gz | tar -xzf - --strip-components=1 -C . && \
     curl -Lfs https://github.com/spack/spack/pull/34926.patch | patch -p1 && \
     curl -Lfs https://github.com/spack/spack/pull/35020.patch | patch -p1 && \
+    curl -Lfs https://github.com/spack/spack/pull/35050.patch | patch -p1 && \
     true
 
-# System make is not great :(
-RUN curl -Lfs 'https://github.com/JuliaBinaryWrappers/GNUMake_jll.jl/releases/download/GNUMake-v4.4.0+0/GNUMake.v4.4.0.x86_64-linux-gnu.tar.gz' | tar -xzf - -C /usr
-
 ADD spack.yaml Makefile /root/
+ADD compilers.yaml packages.yaml /root/spack/etc/spack
+
+RUN spack config blame packages
+
+# Assume system make is too old
+RUN spack env create --with-view /root/tools tools && \
+    spack -e tools add gmake@4.4 && \
+    spack -e tools concretize && \
+    spack -e tools install -v
+
 
 RUN --mount=type=cache,target=/buildcache \
     --mount=type=cache,target=/root/.spack/cache \

@@ -1,5 +1,5 @@
 SPACK ?= spack
-SPACK_INSTALL_FLAGS += --no-check-signature --verbose
+SPACK_INSTALL_FLAGS += --no-check-signature
 BUILDCACHE = $(CURDIR)/buildcache
 MAKEFLAGS += -Orecurse
 
