@@ -11,7 +11,6 @@ RUN apt-get -yqq update && \
         build-essential \
         ca-certificates \
         clang \
-        llvm \
         curl \
         file \
         g++ \
@@ -21,6 +20,7 @@ RUN apt-get -yqq update && \
         gnupg2 \
         iproute2 \
         lld \
+        llvm \
         make \
         patch \
         python3 \
@@ -36,8 +36,6 @@ RUN mkdir spack && \
 
 ADD spack.yaml Makefile /root/
 ADD compilers.yaml packages.yaml /root/spack/etc/spack
-
-RUN spack config blame packages
 
 # Assume system make is too old
 RUN spack env create --with-view /root/tools tools && \
