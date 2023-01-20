@@ -4,7 +4,7 @@ WORKDIR /root
 
 ENV DEBIAN_FRONTEND=noninteractive \
     LC_ALL=C \
-    PATH=/root/tools/bin:/root/spack/bin:/usr/bin:/bin
+    PATH=/root/tools/bin:/root/spack/bin:$PATH
 
 RUN apt-get -yqq update && \
     apt-get -yqq install \

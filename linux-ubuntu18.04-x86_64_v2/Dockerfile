@@ -1,4 +1,4 @@
-FROM ubuntu:20.04 as build
+FROM ubuntu:18.04 as build
 
 WORKDIR /root
 
@@ -30,7 +30,7 @@ RUN mkdir spack && \
     true
 
 ADD spack.yaml Makefile /root/
-ADD linux-ubuntu20.04-x86_64_v2/compilers.yaml linux-ubuntu20.04-x86_64_v2/packages.yaml /root/spack/etc/spack
+ADD linux-ubuntu18.04-x86_64_v2/compilers.yaml linux-ubuntu18.04-x86_64_v2/packages.yaml /root/spack/etc/spack
 
 # Assume system make is too old
 RUN spack env create --with-view /root/tools tools && \
@@ -49,7 +49,7 @@ RUN find -L /opt/spack -type d \( -name '__pycache__' -or -name '.spack' \) -exe
     find -L /opt/spack -type f -name '*.a' -exec rm -rf {} +
 
 # Stage 2, create a small(er) docker image
-FROM ubuntu:20.04
+FROM ubuntu:18.04
 
 ENV DEBIAN_FRONTEND=noninteractive \
     LC_ALL=C \
