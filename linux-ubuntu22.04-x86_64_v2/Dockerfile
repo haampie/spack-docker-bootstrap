@@ -1,4 +1,4 @@
-FROM ubuntu:20.04 as build
+FROM ubuntu:22.04 as build
 
 WORKDIR /root
 
@@ -13,9 +13,6 @@ RUN apt-get -yqq update && \
         clang \
         curl \
         file \
-        g++ \
-        gcc \
-        gfortran \
         git \
         gnupg2 \
         iproute2 \
@@ -35,13 +32,13 @@ RUN mkdir spack && \
     true
 
 ADD spack.yaml Makefile /root/
-ADD compilers.yaml packages.yaml /root/spack/etc/spack
+ADD linux-ubuntu22.04-x86_64_v2/compilers.yaml linux-ubuntu22.04-x86_64_v2/packages.yaml /root/spack/etc/spack
 
 # Assume system make is too old
 RUN spack env create --with-view /root/tools tools && \
     spack -e tools add gmake@4.4 && \
     spack -e tools concretize && \
-    spack -e tools install -v
+    spack -e tools install
 
 
 RUN --mount=type=cache,target=/buildcache \
@@ -54,7 +51,7 @@ RUN find -L /opt/spack -type d \( -name '__pycache__' -or -name '.spack' \) -exe
     find -L /opt/spack -type f -name '*.a' -exec rm -rf {} +
 
 # Stage 2, create a small(er) docker image
-FROM ubuntu:20.04
+FROM ubuntu:22.04
 
 ENV DEBIAN_FRONTEND=noninteractive \
     LC_ALL=C \
