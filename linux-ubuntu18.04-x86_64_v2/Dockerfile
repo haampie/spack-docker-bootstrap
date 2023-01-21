@@ -29,6 +29,7 @@ RUN mkdir spack && \
     curl -Lfs https://github.com/spack/spack/pull/34926.patch | patch -p1 && \
     curl -Lfs https://github.com/spack/spack/pull/35020.patch | patch -p1 && \
     curl -Lfs https://github.com/spack/spack/pull/35061.patch | patch -p1 && \
+    curl -Lfs https://github.com/spack/spack/pull/35062.patch | patch -p1 && \
     true
 
 ADD spack.yaml Makefile /root/
