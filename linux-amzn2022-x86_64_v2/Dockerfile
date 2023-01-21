@@ -26,6 +26,7 @@ RUN mkdir spack && \
     true
 
 ADD spack.yaml Makefile /root/
+
 ADD linux-amzn2022-x86_64_v2/compilers.yaml linux-amzn2022-x86_64_v2/packages.yaml /root/spack/etc/spack
 
 # Assume system make is too old
@@ -33,7 +34,6 @@ RUN spack env create --with-view /root/tools tools && \
     spack -e tools add gmake@4.4 && \
     spack -e tools concretize && \
     spack -e tools install
-
 
 RUN --mount=type=cache,target=/buildcache \
     --mount=type=cache,target=/root/.spack/cache \
@@ -58,7 +58,7 @@ RUN yum install -y gcc g++ gfortran && \
     rm -rf /var/cache/yum/*
 
 # Install Spack again and populate caches by concretizing something
-RUN mkdir /root/spack && \
-    curl -Lfs https://github.com/spack/spack/archive/refs/heads/develop.tar.gz | tar -xzf - --strip-components=1 -C /root/spack && \
-    spack compiler find && \
-    spack spec hdf5
+# RUN mkdir /root/spack && \
+#     curl -Lfs https://github.com/spack/spack/archive/refs/heads/develop.tar.gz | tar -xzf - --strip-components=1 -C /root/spack && \
+#     spack compiler find && \
+#     spack spec hdf5

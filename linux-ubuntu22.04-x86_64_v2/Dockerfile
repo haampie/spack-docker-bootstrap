@@ -13,6 +13,8 @@ RUN apt-get -yqq update && \
         clang \
         curl \
         file \
+        g++ \
+        gcc \
         git \
         gnupg2 \
         iproute2 \
@@ -28,7 +30,6 @@ RUN mkdir spack && \
     curl -Lfs https://github.com/spack/spack/archive/refs/heads/develop.tar.gz | tar -xzf - --strip-components=1 -C . && \
     curl -Lfs https://github.com/spack/spack/pull/34926.patch | patch -p1 && \
     curl -Lfs https://github.com/spack/spack/pull/35020.patch | patch -p1 && \
-    curl -Lfs https://github.com/spack/spack/pull/35050.patch | patch -p1 && \
     true
 
 ADD spack.yaml Makefile /root/
@@ -46,9 +47,8 @@ RUN --mount=type=cache,target=/buildcache \
     spack mirror add cache /buildcache && \
     make -j$(nproc) BUILDCACHE=/buildcache
 
-# Remove Spack metadata, python cache and static libraries to save some bytes
-RUN find -L /opt/spack -type d \( -name '__pycache__' -or -name '.spack' \) -exec rm -rf {} + && \
-    find -L /opt/spack -type f -name '*.a' -exec rm -rf {} +
+# Remove Spack metadata / Python cache to save some bytes
+RUN find -L /opt/spack -type d \( -name '__pycache__' -or -name '.spack' \) -exec rm -rf {} +
 
 # Stage 2, create a small(er) docker image
 FROM ubuntu:22.04
@@ -61,11 +61,11 @@ COPY --from=build /opt/spack /opt/spack
 
 # We stick to system compilers & linkers
 RUN apt-get -yqq update && \
-    apt-get -yqq install --no-install-recommends gcc gfortran g++ libc-dev && \
+    apt-get -yqq install --no-install-recommends libc-dev && \
     rm -rf /var/lib/apt/lists/*
 
 # Install Spack again and populate caches by concretizing something
-RUN mkdir /root/spack && \
-    curl -Lfs https://github.com/spack/spack/archive/refs/heads/develop.tar.gz | tar -xzf - --strip-components=1 -C /root/spack && \
-    spack compiler find && \
-    spack spec hdf5
+# RUN mkdir /root/spack && \
+#     curl -Lfs https://github.com/spack/spack/archive/refs/heads/develop.tar.gz | tar -xzf - --strip-components=1 -C /root/spack && \
+#     spack compiler find && \
+#     spack spec hdf5

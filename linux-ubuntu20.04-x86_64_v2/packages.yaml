@@ -1,3 +1,7 @@
 packages:
   all:
     require: target=x86_64_v2
+  gcc:
+    require: '@9.4.0'
+  binutils:
+    require: '@2.34'
