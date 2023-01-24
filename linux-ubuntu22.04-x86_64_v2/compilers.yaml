@@ -18,8 +18,8 @@ compilers:
 - compiler:
     spec: gcc@11.3.0
     paths:
-      cc: /usr/bin/clang
-      cxx: /usr/bin/clang++
+      cc: /usr/bin/gcc
+      cxx: /usr/bin/g++
       f77: null
       fc: null
     flags:

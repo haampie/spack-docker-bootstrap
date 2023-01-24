@@ -4,4 +4,4 @@ packages:
   gcc:
     require: '@11.3.0'
   binutils:
-    require: '@2.38'
+    require: '@2.38 +pgo'

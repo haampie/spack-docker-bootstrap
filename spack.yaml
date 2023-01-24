@@ -8,7 +8,7 @@ spack:
   - 'gcc %gcc languages=c,c++,fortran +profiled build_type=Release +strip'
   - 'git %clang'
   - 'gmake@4.4: %clang'
-  - 'gnupg %clang'
+  - 'gnupg %clang ^libgcrypt~jent'
   - 'gzip %clang'
   - 'lz4 %clang'
   - 'lzo %clang'
@@ -29,3 +29,7 @@ spack:
   packages:
     all:
       variants: ~nls
+    binutils:
+      variants: libs=static
+    zlib:
+      variants: ~shared
