@@ -1,6 +1,7 @@
 spack:
   view: false
   specs:
+  - 'awscli'
   - 'binutils %gcc +ld +gas +gold'
   - 'clingo-bootstrap@spack %clang +optimized'
   - 'curl %clang'
@@ -8,7 +9,7 @@ spack:
   - 'gcc %gcc languages=c,c++,fortran +profiled build_type=Release +strip'
   - 'git %clang'
   - 'gmake@4.4: %clang'
-  - 'gnupg %clang ^libgcrypt~jent'
+  - 'gnupg %clang'
   - 'gzip %clang'
   - 'lz4 %clang'
   - 'lzo %clang'
