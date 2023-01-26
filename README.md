@@ -1,7 +1,8 @@
 # Spack in Docker with buildcache
 
-This bootstraps Spack's own, optimized dependencies, but in the end still uses
-the distro's compiler toolchain.
+This bootstraps Spack's own, optimized dependencies, as well as the
+compiler toolchain of the distro, so that in the end we just depend
+on system libc.
 
 See [spack.yaml](spack.yaml) for things that are built by Spack, and
 [Makefile](Makefile) and [Dockerfile](Dockerfile) for how it's built.
