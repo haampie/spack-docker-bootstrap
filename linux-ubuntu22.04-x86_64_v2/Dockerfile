@@ -16,8 +16,6 @@ RUN apt-get -yqq update && \
         g++ \
         gcc \
         git \
-        gnupg2 \
-        iproute2 \
         lld \
         llvm \
         make \
