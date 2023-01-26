@@ -11,7 +11,7 @@ Docker buildkit is required.
 Build with:
 
 ```
-DOCKER_BUILDKIT=1 docker build -t spack-optimized --progress=plain .
+DOCKER_BUILDKIT=1 docker build -f linux-ubuntu22.04-x86_64_v2/Dockerfile -t spack-optimized --progress=plain .
 ```
 
 Since this uses Python 3.11 and clingo with some optimizations, it should
