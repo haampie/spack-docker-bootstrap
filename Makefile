@@ -9,9 +9,6 @@ export SPACK_BACKTRACE = yes
 .PHONY: all
 
 all: push
-	# TODO: Everything is explicit when using the generated makefile :(
-	$(SPACK) -e . mark --all --implicit
-	$(SPACK) -e . install
 	$(SPACK) -e . gc --yes-to-all
 	$(SPACK) -e . env view --link run enable /opt/spack/view
 
