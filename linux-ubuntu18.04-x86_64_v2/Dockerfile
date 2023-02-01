@@ -30,7 +30,6 @@ RUN mkdir spack && \
     curl -Lfs https://github.com/spack/spack/pull/35020.patch | patch -p1 && \
     curl -Lfs https://github.com/spack/spack/pull/35062.patch | patch -p1 && \
     curl -Lfs https://github.com/spack/spack/pull/35078.patch | patch -p1 && \
-    curl -Lfs https://github.com/spack/spack/pull/35158.patch | patch -p1 && \
     curl -Lfs https://github.com/spack/spack/pull/35174.patch | patch -p1 && \
     true
 
