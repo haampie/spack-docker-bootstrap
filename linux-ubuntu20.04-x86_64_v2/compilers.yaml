@@ -7,9 +7,9 @@ compilers:
       f77: null
       fc: null
     flags:
-      cxxflags: '-O3 -g0 -ffunction-sections'
-      cflags: '-O3 -g0 -ffunction-sections'
-      ldflags: '-fuse-ld=lld -Wl,-O3,--icf=safe'
+      cxxflags: '-O3 -g0'
+      cflags: '-O3 -g0'
+      ldflags: '-fuse-ld=lld -Wl,-O3'
     operating_system: ubuntu20.04
     target: x86_64
     modules: []
