@@ -1,4 +1,4 @@
-FROM amazonlinux:2022 as build
+FROM amazonlinux:2023 as build
 
 WORKDIR /root
 
@@ -28,7 +28,7 @@ RUN mkdir spack && \
 
 ADD spack.yaml Makefile /root/
 
-ADD linux-amzn2022-x86_64_v2/compilers.yaml linux-amzn2022-x86_64_v2/packages.yaml /root/spack/etc/spack
+ADD linux-amzn2023-x86_64_v2/compilers.yaml linux-amzn2023-x86_64_v2/packages.yaml /root/spack/etc/spack
 
 # Assume system make is too old
 RUN spack env create --with-view /root/tools tools && \
@@ -41,12 +41,12 @@ RUN --mount=type=cache,target=/buildcache \
     spack mirror add cache /buildcache && \
     make -j$(nproc) BUILDCACHE=/buildcache
 
-# Remove Spack metadata, python cache and static libraries to save some bytes
+# Remove Spack metadata / Python cache to save some bytes
 RUN find -L /opt/spack -type d \( -name '__pycache__' -or -name '.spack' \) -exec rm -rf {} + && \
     find -L /opt/spack -type f -name '*.a' -exec rm -rf {} +
 
 # Stage 2, create a small(er) docker image
-FROM amazonlinux:2022
+FROM amazonlinux:2023
 
 ENV LC_ALL=C \
     PATH=/opt/spack/view/bin:/root/spack/bin:$PATH
@@ -54,7 +54,7 @@ ENV LC_ALL=C \
 COPY --from=build /opt/spack /opt/spack
 
 # We stick to system compilers & linkers
-RUN yum install -y gcc g++ gfortran && \
+RUN yum install -y gcc g++ gfortran binutils && \
     yum clean all && \
     rm -rf /var/cache/yum/*
 

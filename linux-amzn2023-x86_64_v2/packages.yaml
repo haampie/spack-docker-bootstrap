@@ -1,0 +1,7 @@
+packages:
+  all:
+    require: target=x86_64_v2
+  gcc:
+    require: '@11.3'
+  binutils:
+    require: '@2.39 +pgo'
